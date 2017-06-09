@@ -3,7 +3,6 @@ package com.example.jpa;
 import com.example.jpa.entity.Account;
 import com.example.jpa.service.IAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
