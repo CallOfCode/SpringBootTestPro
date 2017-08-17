@@ -2,8 +2,12 @@ package com.example.mybatis.dao;
 
 import com.example.mybatis.entity.Account;
 import org.apache.ibatis.annotations.*;
+import org.apache.ibatis.jdbc.SQL;
+import org.springframework.util.NumberUtils;
+import org.springframework.util.StringUtils;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -25,8 +29,11 @@ public interface AccountMapper {
     @Select("select id,name,money from account where id=#{id}")
     Account findAccount(@Param("id") int id);
 
-    @Select("select id,name,money from account")
-    List<Account> findAccountList();
+    @SelectProvider(type = AccountMapperProvider.class,method = "findAccountByNameAndMoney")
+    List<Account> findAccountList(@Param("name") String name,@Param("money") Double money);
+
+//    @Select("select id,name,money from account")
+//    List<Account> findAccountList();
 
     @Select("select id,name,money from account")
     List<Account> findAccountPageList();
@@ -43,6 +50,24 @@ public interface AccountMapper {
                 sb.append(mf.format(new Object[]{i,i}));
             }
             return sb.toString();
+        }
+
+        public String findAccountByNameAndMoney(Map map){
+            List<String> sqlArrayList = new ArrayList<>();
+            String name = (String)map.get("name");
+            Double money = (Double)map.get("money");
+            if(!StringUtils.isEmpty(name))
+                sqlArrayList.add("name=#{name}");
+            if(null!=money)
+                sqlArrayList.add("money>=#{money}");
+
+            return new SQL(){
+                {
+                    SELECT("id,name,money");
+                    FROM("account");
+                    WHERE(sqlArrayList.toArray(new String[sqlArrayList.size()]));
+                }
+            }.toString();
         }
     }
 }

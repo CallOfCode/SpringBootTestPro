@@ -31,9 +31,14 @@ public class AccountService {
     public Account findAccount(int id) {
         return accountMapper.findAccount(id);
     }
-    public List<Account> findAccountList() {
-        return accountMapper.findAccountList();
+//    public List<Account> findAccountList() {
+//        return accountMapper.findAccountList();
+//    }
+
+    public List<Account> findAccountList(String name,Double money){
+        return accountMapper.findAccountList(name,money);
     }
+
 
     public List<Account> findAccountPageList(int pageNum,int pageSize) {
         PageHelper.startPage(pageNum,pageSize);

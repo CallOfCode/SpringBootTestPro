@@ -16,10 +16,12 @@ public class AccountCountroller {
     @Autowired
     AccountService accountService;
 
+
     @RequestMapping(value = "/list",method = RequestMethod.GET)
-    public List<Account> getAccounts(){
-        return accountService.findAccountList();
+    public List<Account> getAccounts(@RequestParam(value = "name") String name, @RequestParam(value = "money",required = true) double money){
+        return accountService.findAccountList(name,money);
     }
+
 
     @RequestMapping(value = "/pagelist",method = RequestMethod.GET)
     public List<Account> getPageAccounts(@RequestParam(value = "pageNum",required = true) int pageNum, @RequestParam(value = "pageSize",required = true)int pageSize){
